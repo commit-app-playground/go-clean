@@ -8,8 +8,7 @@ import (
 	_ "github.com/lib/pq"
 
 	"toporet/hop/goclean/controller"
-	"toporet/hop/goclean/gateway"
-	"toporet/hop/goclean/usecase"
+	"toporet/hop/goclean/usecase/book"
 )
 
 func main() {
@@ -18,12 +17,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	booksRepository := gateway.NewBookRepository(db)
-	useCase := usecase.NewAllBooksUseCase(booksRepository)
-
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/books", controller.Books(useCase))
+	getAll := book.Bootstrap(db)
+
+	mux.HandleFunc("/books", controller.Books(getAll))
 
 	log.Fatal(http.ListenAndServe(":8080", mux))
 }

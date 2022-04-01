@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"toporet/hop/goclean/usecase"
+	"toporet/hop/goclean/usecase/book"
 )
 
-func Books(u *usecase.AllBoksUseCase) http.HandlerFunc {
+func Books(u book.GetAllBooksUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if strings.ToUpper(r.Method) != http.MethodGet {
 			http.NotFound(w, r)

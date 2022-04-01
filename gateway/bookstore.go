@@ -5,28 +5,17 @@ import (
 	"toporet/hop/goclean/entity"
 )
 
-// type IGetAllBooks interface {
-// 	 AllBooks() ([]entity.Book, error)
-// }
-
 type IGetAllBooks func() ([]entity.Book, error)
 
-type BookRepository struct {
+type BookStore struct {
 	db *sql.DB
-	// usecase.BookRetriever
 }
 
-func NewBookRepository(db *sql.DB) BookRepository {
-	return BookRepository{
-		db: db,
-		// IGetAllBooks2: AllBooks1,
-	}
+func NewBookStore(db *sql.DB) BookStore {
+	return BookStore{db}
 }
 
-// Update the AllBooks function so it accepts the connection pool as a
-// parameter.
-// func (br BookRepository) AllBooks() ([]entity.Book, error) {
-func (br BookRepository) RetrieveAllBooks() ([]entity.Book, error) {
+func (br BookStore) RetrieveAll() ([]entity.Book, error) {
 	rows, err := br.db.Query("SELECT * FROM books")
 	if err != nil {
 		return nil, err
