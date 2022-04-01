@@ -2,12 +2,13 @@ package main
 
 import (
 	"database/sql"
-	"io"
 	"log"
 	"net/http"
 
-	"toporet/hop/goclean/entity"
-	"toporet/hop/goclean/infrastructure"
+	_ "github.com/lib/pq"
+
+	"toporet/hop/goclean/controller"
+	"toporet/hop/goclean/gateway"
 	"toporet/hop/goclean/usecase"
 )
 
@@ -17,19 +18,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	userRepository := infrastructure.NewUserRepository(db)
-	useCase := usecase.NewUserRegisterUseCase(userRepository)
+	booksRepository := gateway.NewBookRepository(db)
+	useCase := usecase.NewAllBooksUseCase(booksRepository)
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", helloWorld(useCase))
+	mux.HandleFunc("/books", controller.Books(useCase))
 
 	log.Fatal(http.ListenAndServe(":8080", mux))
-}
-
-func helloWorld(u *usecase.UserRegisterUseCase) http.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request) {
-		u.RegisterUser(entity.User{})
-		io.WriteString(rw, `{"message": "hello world..."}`)
-	}
 }

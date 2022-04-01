@@ -1,0 +1,7 @@
+### Get All Books
+
+GET http://localhost:8080/books
+
+### Create a bok
+POST http://localhost:8080/books
+
