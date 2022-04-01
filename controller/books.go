@@ -15,7 +15,7 @@ func Books(u book.GetAllBooksUseCase) http.HandlerFunc {
 			return
 		}
 
-		books, err := u.GetAllBooks( /* entity.User{} */ )
+		books, err := u.GetAllBooks()
 
 		if err != nil {
 			w.Write([]byte(err.Error()))

@@ -14,5 +14,6 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-# Delve DAP debug binary
+# Binaries
 __debug_bin
+goclean

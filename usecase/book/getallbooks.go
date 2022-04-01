@@ -17,9 +17,12 @@ func NewGetAllBooksUseCase(s BookStore) GetAllBooksUseCase {
 }
 
 func (u GetAllBooksUseCase) GetAllBooks(
-// /* pass an input model later | user entity.User */
+//
+// pass an input model later
+//
 ) ([]entity.Book, error) {
+	//
 	// potentially more IO interactions and business logic here
-
+	//
 	return u.bookStore.RetrieveAll()
 }
