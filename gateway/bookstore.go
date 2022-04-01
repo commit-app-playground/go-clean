@@ -2,6 +2,7 @@ package gateway
 
 import (
 	"database/sql"
+
 	"toporet/hop/goclean/entity"
 )
 
@@ -15,14 +16,14 @@ func NewBookStore(db *sql.DB) BookStore {
 	return BookStore{db}
 }
 
-func (br BookStore) RetrieveAll() ([]entity.Book, error) {
-	rows, err := br.db.Query("SELECT * FROM books")
+func (s BookStore) RetrieveAll() ([]entity.Book, error) {
+	rows, err := s.db.Query("SELECT * FROM books")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var bks []entity.Book
+	var books []entity.Book
 
 	for rows.Next() {
 		var bk entity.Book
@@ -32,11 +33,11 @@ func (br BookStore) RetrieveAll() ([]entity.Book, error) {
 			return nil, err
 		}
 
-		bks = append(bks, bk)
+		books = append(books, bk)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return bks, nil
+	return books, nil
 }
