@@ -41,7 +41,3 @@ func (p GetAllBooksPresenter) Present(o book.GetAllBooksOut) {
 		w.WriteHeader(http.StatusOK)
 	}
 }
-
-func (p GetAllBooksPresenter) WriteResponse(w http.ResponseWriter) {
-
-}
