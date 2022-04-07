@@ -25,12 +25,12 @@ func (o CreateTaskOut) Error() error {
 type Presenter = usecase.Presenter[CreateTaskOut]
 
 type CreateTaskUseCase struct {
-	taskSaver TaskSaver
+	taskSaver NewTaskSaver
 	presenter Presenter
 }
 
 func NewCreateTaskUseCase(
-	s TaskSaver,
+	s NewTaskSaver,
 	p Presenter,
 ) CreateTaskUseCase {
 	return CreateTaskUseCase{s, p}
@@ -39,12 +39,12 @@ func NewCreateTaskUseCase(
 func (u CreateTaskUseCase) Handle(in CreateTaskIn) {
 	doIt := func() CreateTaskOut {
 		tn, err := entity.NewTaskName(in.taskName)
-		if err == nil {
+		if err != nil {
 			return CreateTaskOut{"", err}
 		}
 
 		task := entity.NewTask(tn)
-		id, err := u.taskSaver.SaveNewTask(*task)
+		id, err := u.taskSaver.SaveNewTask(task)
 		if err != nil {
 			return CreateTaskOut{"", err}
 		}

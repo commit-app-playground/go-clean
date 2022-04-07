@@ -1,24 +1,14 @@
 package task
 
 import (
-	"encoding/json"
-	"errors"
 	"net/http"
+	"toporet/hop/goclean/controller"
 	"toporet/hop/goclean/usecase/task"
 )
 
 func create(w http.ResponseWriter, r *http.Request, f CreateTaskFactory) {
 
-	parseRequest := func() (*task.CreateTaskIn, error) {
-		var in task.CreateTaskIn
-		if r.Body == nil {
-			return nil, errors.New("Missing request body")
-		}
-		err := json.NewDecoder(r.Body).Decode(&in)
-		return &in, err
-	}
-
-	in, err := parseRequest()
+	in, err := controller.ParseRequestAs[task.CreateTaskIn](r)
 
 	if err != nil {
 		http.Error(w, err.Error(), 400)
@@ -26,5 +16,5 @@ func create(w http.ResponseWriter, r *http.Request, f CreateTaskFactory) {
 	}
 
 	uc := f(w, r)
-	uc.Handle(*in)
+	uc.Handle(in)
 }

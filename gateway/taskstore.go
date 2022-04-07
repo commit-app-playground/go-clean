@@ -12,18 +12,18 @@ type TaskStore struct {
 	db *sql.DB
 }
 
-func NewTaskStore(db *sql.DB) TaskStore {
-	return TaskStore{db}
+func NewTaskStore(db *sql.DB) *TaskStore {
+	return &TaskStore{db}
 }
 
-func (s TaskStore) SaveNewTask(t entity.Task) (*entity.TaskId, error) {
+func (s TaskStore) SaveNewTask(t *entity.Task) (*entity.TaskId, error) {
 	//
 	// TODO: implement saving for realz
 	//
 	return entity.NewTaskId("foo-bar-42")
 }
 
-func (s TaskStore) SaveTask(t entity.Task) error {
+func (s TaskStore) SaveTask(t *entity.Task) error {
 	//
 	// TODO: implement saving for realz
 	//

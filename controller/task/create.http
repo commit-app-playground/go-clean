@@ -1,12 +1,37 @@
-### Invalid request (missing body)
+### Invalid request (missing content-type)
 
 POST http://localhost:8080/tasks
 
 
-### Invalid request (malformed body)
+### Invalid request (invalid content-type)
 
-POST http://localhost:8080/books
+POST http://localhost:8080/tasks
+content-type: text/html
+
+
+### Invalid request (missing body)
+
+POST http://localhost:8080/tasks
+content-type: application/json
+
+
+### Invalid request (malformed JSON)
+
+POST http://localhost:8080/tasks
+content-type: application/json
+
 {
-    // TODO:
+    "foo: ["bar",
+    "hi": 123}
 }
 
+
+### Invalid request (invalid payload)
+
+POST http://localhost:8080/tasks
+content-type: application/json
+
+{
+    "foo": "bar",
+    "hi": 123
+}
