@@ -1,30 +1,20 @@
 package entity
 
-import (
-	"fmt"
-	"strings"
-)
-
 type Task struct {
-	id   int
-	name string
+	id   *TaskId
+	name *TaskName
 	done bool
 }
 
-func NewTask(id int, name string) (*Task, error) {
-	trim := strings.TrimSpace(name)
-
-	if trim == "" {
-		return nil, fmt.Errorf("task name is empty or whitespace (%q)", name)
-	}
-	return &Task{id, name, false}, nil
+func NewTask(id *TaskId, name *TaskName) *Task {
+	return &Task{id, name, false}
 }
 
-func (t *Task) Id() int {
+func (t *Task) Id() *TaskId {
 	return t.id
 }
 
-func (t *Task) Name() string {
+func (t *Task) Name() *TaskName {
 	return t.name
 }
 

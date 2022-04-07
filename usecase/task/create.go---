@@ -35,8 +35,8 @@ func (u GetAllBooksUseCase) Handle(in GetAllBooksIn) {
 
 type Presenter = usecase.Presenter[CreateTaskOut]
 
-type BookStore interface {
-	RetrieveAll() ([]entity.Book, error)
+type TaskSaver interface {
+	Save(t entity.Task) ([]entity.Book, error)
 }
 
 func (o GetAllBooksOut) Books() []entity.Book {
