@@ -10,8 +10,7 @@ import (
 	_ "github.com/lib/pq"
 
 	"toporet/hop/goclean/bootstrap"
-	"toporet/hop/goclean/controller"
-	// "toporet/hop/goclean/controller/task"
+	"toporet/hop/goclean/controller/task"
 )
 
 func main() {
@@ -25,10 +24,9 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	getAll := bootstrap.Book(db)
+	createTask := bootstrap.Task(db)
 
-	mux.HandleFunc("/books", controller.Books(getAll))
-	// mux.HandleFunc("/tasks", task.Handler(getAll))
+	mux.HandleFunc("/tasks", task.Handle(createTask))
 
 	log.Fatal(http.ListenAndServe(":8080", mux))
 }

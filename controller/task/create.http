@@ -1,0 +1,12 @@
+### Invalid request (missing body)
+
+POST http://localhost:8080/tasks
+
+
+### Invalid request (malformed body)
+
+POST http://localhost:8080/books
+{
+    // TODO:
+}
+

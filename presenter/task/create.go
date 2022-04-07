@@ -5,36 +5,40 @@ import (
 	"log"
 	"net/http"
 
-	"toporet/hop/goclean/usecase/book"
+	"toporet/hop/goclean/usecase/task"
 )
 
-type GetAllBooksPresenter struct {
+type CreateTaskPresenter struct {
 	w http.ResponseWriter
 }
 
-func NewGetAllBooksPresenter(w http.ResponseWriter) GetAllBooksPresenter {
-	return GetAllBooksPresenter{w: w}
+func NewCreateTaskPresenter(w http.ResponseWriter) CreateTaskPresenter {
+	return CreateTaskPresenter{w: w}
 }
 
-func (p GetAllBooksPresenter) Present(o book.GetAllBooksOut) {
-	books := o.Books()
-	err := o.Err()
+func (p CreateTaskPresenter) Present(o task.CreateTaskOut) {
+	taskId := o.TaskId()
+	err := o.Error()
 	w := p.w
 
 	if err != nil {
 
+		// TODO: interpret the error, e.g. duplicate task name => 400, not 500
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 
 	} else {
 
 		w.Header().Set("Content-Type", "application/json")
+
+		// TODO: set location header using the taskId
+
 		w.WriteHeader(http.StatusOK)
 
 		resp := make(map[string]any)
 		resp["status"] = http.StatusOK
 		resp["statusText"] = "Status OK"
-		resp["data"] = books
+		resp["data"] = taskId
 
 		err = json.NewEncoder(w).Encode(resp)
 		if err != nil {

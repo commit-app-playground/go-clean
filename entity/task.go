@@ -1,13 +1,27 @@
 package entity
 
+import "errors"
+
 type Task struct {
 	id   *TaskId
 	name *TaskName
 	done bool
 }
 
-func NewTask(id *TaskId, name *TaskName) *Task {
-	return &Task{id, name, false}
+func NewTask(name *TaskName) *Task {
+	return &Task{nil, name, false}
+}
+
+func NewTaskFromExisting(id *TaskId, name *TaskName, done bool) (*Task, error) {
+	if id == nil {
+		return nil, errors.New("nil task id")
+	}
+
+	if name == nil {
+		return nil, errors.New("nil task name")
+	}
+
+	return &Task{id, name, done}, nil
 }
 
 func (t *Task) Id() *TaskId {
