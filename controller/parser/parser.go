@@ -1,4 +1,4 @@
-package controller
+package parser
 
 import (
 	"encoding/json"
@@ -13,10 +13,7 @@ import (
 const contentType string = "Content-Type"
 const applicationJson string = "application/json"
 
-func ParseRequestAs[TPayload any](r *http.Request) (p TPayload, err error) {
-
-	// var p *TPayload
-	// var err error
+func ParseRequestAs[TPayload any](r *http.Request) (payload TPayload, err error) {
 
 	hct := r.Header[contentType]
 	if _, ok := slices.BinarySearch(hct, applicationJson); !ok {
@@ -27,7 +24,7 @@ func ParseRequestAs[TPayload any](r *http.Request) (p TPayload, err error) {
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
 
-	err = decoder.Decode(&p)
+	err = decoder.Decode(&payload)
 	if err == io.EOF {
 		err = errors.New("Missing request body")
 		return
