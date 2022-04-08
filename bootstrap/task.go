@@ -4,18 +4,19 @@ import (
 	"database/sql"
 	"net/http"
 
-	c "toporet/hop/goclean/controller/task"
-	g "toporet/hop/goclean/gateway"
-	p "toporet/hop/goclean/presenter/task"
-	u "toporet/hop/goclean/usecase/task"
+	controller "toporet/hop/goclean/controller/task"
+	presenter "toporet/hop/goclean/presenter/task"
+
+	"toporet/hop/goclean/gateway"
+	"toporet/hop/goclean/usecase/task/create"
 )
 
-func Task(db *sql.DB) c.CreateTaskFactory {
-	return func(w http.ResponseWriter, r *http.Request) u.CreateTaskUseCase {
-		store := g.NewTaskStore(db)
+func Task(db *sql.DB) controller.CreateTaskUseCaseFactory {
+	return func(w http.ResponseWriter, r *http.Request) create.CreateTaskUseCase {
+		store := gateway.NewTaskStore(db)
 
-		ucCreate := u.NewCreateTaskUseCase(store, p.NewCreateTaskPresenter(w))
+		ucCreate := create.NewCreateTaskUseCase(store, presenter.NewCreateTaskPresenter(w))
 
-		return ucCreate
+		return ucCreate // , TODO: return more use case factories
 	}
 }

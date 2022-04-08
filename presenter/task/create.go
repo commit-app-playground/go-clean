@@ -1,11 +1,11 @@
-package book
+package task
 
 import (
 	"encoding/json"
 	"log"
 	"net/http"
 
-	"toporet/hop/goclean/usecase/task"
+	"toporet/hop/goclean/usecase/task/create"
 )
 
 type CreateTaskPresenter struct {
@@ -16,7 +16,7 @@ func NewCreateTaskPresenter(w http.ResponseWriter) CreateTaskPresenter {
 	return CreateTaskPresenter{w: w}
 }
 
-func (p CreateTaskPresenter) Present(o task.CreateTaskOut) {
+func (p CreateTaskPresenter) Present(o create.CreateTaskOut) {
 	taskId := o.TaskId()
 	err := o.Error()
 	w := p.w
