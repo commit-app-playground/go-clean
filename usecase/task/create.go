@@ -1,12 +1,20 @@
 package task
 
 import (
+	"fmt"
 	"toporet/hop/goclean/entity"
 	"toporet/hop/goclean/usecase"
 )
 
 type CreateTaskIn struct {
 	taskName string
+}
+
+func NewCreateTaskIn(taskName string) (*CreateTaskIn, error) {
+	if len(taskName) == 0 {
+		return nil, fmt.Errorf("task name is required but got empty")
+	}
+	return &CreateTaskIn{taskName}, nil
 }
 
 type CreateTaskOut struct {
@@ -37,7 +45,7 @@ func NewCreateTaskUseCase(
 }
 
 func (u CreateTaskUseCase) Handle(in CreateTaskIn) {
-	doIt := func() CreateTaskOut {
+	out := func() CreateTaskOut {
 		tn, err := entity.NewTaskName(in.taskName)
 		if err != nil {
 			return CreateTaskOut{"", err}
@@ -50,9 +58,7 @@ func (u CreateTaskUseCase) Handle(in CreateTaskIn) {
 		}
 
 		return CreateTaskOut{id.String(), nil}
-	}
-
-	out := doIt()
+	}()
 
 	u.presenter.Present(out)
 }

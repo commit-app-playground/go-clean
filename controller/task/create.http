@@ -1,3 +1,22 @@
+### Valid request
+
+POST http://localhost:8080/tasks
+content-type: application/json
+
+{
+    "name": "first task"
+}
+
+### Valid payload but violates business rules
+
+POST http://localhost:8080/tasks
+content-type: application/json
+
+{
+    "name": ""
+}
+
+
 ### Invalid request (missing content-type)
 
 POST http://localhost:8080/tasks
@@ -15,17 +34,6 @@ POST http://localhost:8080/tasks
 content-type: application/json
 
 
-### Invalid request (malformed JSON)
-
-POST http://localhost:8080/tasks
-content-type: application/json
-
-{
-    "foo: ["bar",
-    "hi": 123}
-}
-
-
 ### Invalid request (invalid payload)
 
 POST http://localhost:8080/tasks
@@ -34,4 +42,15 @@ content-type: application/json
 {
     "foo": "bar",
     "hi": 123
+}
+
+
+### Invalid request (malformed JSON)
+
+POST http://localhost:8080/tasks
+content-type: application/json
+
+{
+    "foo: ["bar",
+    "hi": 123}
 }

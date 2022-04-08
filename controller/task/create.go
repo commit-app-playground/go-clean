@@ -8,7 +8,13 @@ import (
 
 func create(w http.ResponseWriter, r *http.Request, f CreateTaskFactory) {
 
-	in, err := controller.ParseRequestAs[task.CreateTaskIn](r)
+	in, err := func() (*task.CreateTaskIn, error) {
+		p, err := controller.ParseRequestAs[payload](r)
+		if err != nil {
+			return nil, err
+		}
+		return task.NewCreateTaskIn(p.Name)
+	}()
 
 	if err != nil {
 		http.Error(w, err.Error(), 400)
@@ -16,5 +22,9 @@ func create(w http.ResponseWriter, r *http.Request, f CreateTaskFactory) {
 	}
 
 	uc := f(w, r)
-	uc.Handle(in)
+	uc.Handle(*in)
+}
+
+type payload struct {
+	Name string
 }
