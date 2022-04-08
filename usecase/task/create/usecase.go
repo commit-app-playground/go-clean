@@ -5,16 +5,16 @@ import (
 	"toporet/hop/goclean/usecase"
 )
 
-type Presenter = usecase.Presenter[CreateTaskOut]
+type presenter usecase.Presenter[CreateTaskOut]
 
 type CreateTaskUseCase struct {
 	taskSaver NewTaskSaver
-	presenter Presenter
+	presenter presenter
 }
 
 func NewCreateTaskUseCase(
 	s NewTaskSaver,
-	p Presenter,
+	p presenter,
 ) CreateTaskUseCase {
 	return CreateTaskUseCase{s, p}
 }

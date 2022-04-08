@@ -2,8 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"database/sql/driver"
-	"errors"
 	"log"
 	"net/http"
 
@@ -20,7 +18,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	driver.ErrBadConn = errors.New("sdfgh")
 
 	mux := http.NewServeMux()
 
