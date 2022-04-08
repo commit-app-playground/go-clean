@@ -10,8 +10,10 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-const contentType string = "Content-Type"
-const applicationJson string = "application/json"
+const (
+	contentType     string = "Content-Type"
+	applicationJson string = "application/json"
+)
 
 func ParseRequestAs[TPayload any](r *http.Request) (payload TPayload, err error) {
 

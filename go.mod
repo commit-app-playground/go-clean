@@ -3,7 +3,7 @@ module toporet/hop/goclean
 go 1.18
 
 require (
-	github.com/lib/pq v1.10.4
+	github.com/lib/pq v1.10.5
 	gotest.tools v2.2.0+incompatible
 )
 
