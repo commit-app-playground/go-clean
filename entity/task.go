@@ -1,6 +1,9 @@
 package entity
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type Task struct {
 	id   *TaskId
@@ -42,4 +45,18 @@ func (t *Task) MarkComplete() {
 
 func (t *Task) MarkIncomplete() {
 	t.done = false
+}
+
+func (t *Task) String() string {
+	done := "_"
+	if t.done {
+		done = "✔"
+	}
+
+	id := "<new>"
+	if t.id != nil {
+		id = fmt.Sprintf("(%s)", t.id)
+	}
+
+	return fmt.Sprintf("[%s] %s %s", done, t.name, id)
 }

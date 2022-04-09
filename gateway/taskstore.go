@@ -2,6 +2,8 @@ package gateway
 
 import (
 	"database/sql"
+	"fmt"
+	"strings"
 
 	"toporet/hop/goclean/entity"
 )
@@ -20,7 +22,13 @@ func (s TaskStore) SaveNewTask(t *entity.Task) (*entity.TaskId, error) {
 	//
 	// TODO: implement saving for realz
 	//
-	return entity.NewTaskId("foo-bar-42")
+
+	name := t.Name().String()
+	if strings.Contains(name, "fail") {
+		return nil, fmt.Errorf("save failed (%s)", t)
+	}
+
+	return entity.NewTaskId("foo/bar/42")
 }
 
 func (s TaskStore) SaveTask(t *entity.Task) error {

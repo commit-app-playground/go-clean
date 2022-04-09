@@ -7,13 +7,23 @@ content-type: application/json
     "name": "first task"
 }
 
-### Valid payload but violates business rules
+### Valid payload but violates business rules => 400 Bad Request
 
 POST http://localhost:8080/tasks
 content-type: application/json
 
 {
-    "name": ""
+    "name": " "
+}
+
+
+### Valid payload but fails the save to database => 500 Internal Server Error
+
+POST http://localhost:8080/tasks
+content-type: application/json
+
+{
+    "name": "can fail during save"
 }
 
 

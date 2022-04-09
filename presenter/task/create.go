@@ -1,9 +1,9 @@
 package task
 
 import (
-	"encoding/json"
-	"log"
+	"fmt"
 	"net/http"
+	"net/url"
 
 	"toporet/hop/goclean/usecase/task/create"
 )
@@ -17,32 +17,33 @@ func NewCreateTaskPresenter(w http.ResponseWriter) CreateTaskPresenter {
 }
 
 func (p CreateTaskPresenter) Present(o create.CreateTaskOut) {
-	taskId := o.TaskId()
-	err := o.Error()
 	w := p.w
+
+	statusCode, err := func() (int, error) {
+
+		if yes, err := o.IsInputError(); yes {
+			return http.StatusBadRequest, err
+		} else if yes, err := o.IsDatabaseError(); yes {
+			// OR could return http.StatusBadGateway
+			return http.StatusInternalServerError, err
+		} else {
+			return http.StatusCreated, nil
+		}
+	}()
 
 	if err != nil {
 
-		// TODO: interpret the error, e.g. duplicate task name => 400, not 500
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(statusCode)
 		w.Write([]byte(err.Error()))
 
 	} else {
 
-		w.Header().Set("Content-Type", "application/json")
+		id := url.PathEscape(o.TaskId())
 
-		// TODO: set location header using the taskId
+		// TODO: the route /tasks can be a constant
+		// declared somewhere in the common web api related code
+		w.Header().Set("Location", fmt.Sprintf("/tasks/%s", id))
 
-		w.WriteHeader(http.StatusOK)
-
-		resp := make(map[string]any)
-		resp["status"] = http.StatusOK
-		resp["statusText"] = "Status OK"
-		resp["data"] = taskId
-
-		err = json.NewEncoder(w).Encode(resp)
-		if err != nil {
-			log.Fatalf("Error happened in JSON marshal. Err: %s", err)
-		}
+		w.WriteHeader(statusCode)
 	}
 }

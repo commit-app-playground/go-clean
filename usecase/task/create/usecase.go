@@ -23,16 +23,16 @@ func (u CreateTaskUseCase) Handle(in CreateTaskIn) {
 	out := func() CreateTaskOut {
 		tn, err := entity.NewTaskName(in.taskName)
 		if err != nil {
-			return CreateTaskOut{"", err}
+			return CreateTaskOut{}.InputError(err)
 		}
 
 		task := entity.NewTask(tn)
 		id, err := u.taskSaver.SaveNewTask(task)
 		if err != nil {
-			return CreateTaskOut{"", err}
+			return CreateTaskOut{}.DatabaseError(err)
 		}
 
-		return CreateTaskOut{id.String(), nil}
+		return CreateTaskOut{}.Success(id)
 	}()
 
 	u.presenter.Present(out)
