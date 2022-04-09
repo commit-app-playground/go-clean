@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"os"
 
 	_ "github.com/lib/pq"
 
@@ -12,8 +13,9 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("postgres",
-		"postgres://postgres:Password1@localhost/bookstore?sslmode=disable")
+
+	connStr := os.Getenv("DB_CONNECTION_STRING")
+	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {
 		log.Fatal(err)
