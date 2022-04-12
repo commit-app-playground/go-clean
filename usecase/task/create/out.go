@@ -1,6 +1,9 @@
 package create
 
-import "toporet/hop/goclean/entity"
+import (
+	"fmt"
+	"toporet/hop/goclean/entity"
+)
 
 type CreateTaskOut struct {
 	taskId   *string
@@ -21,11 +24,23 @@ func (o CreateTaskOut) Success(id *entity.TaskId) CreateTaskOut {
 	return CreateTaskOut{taskId: &idStr}
 }
 
+//
+// Will panic if accessed when either of inputErr or dbErr are not nil
+//
 func (o CreateTaskOut) TaskId() string {
-	//
-	// will panic if accessed when either
-	// of the inputErr or dbErr aren't nil
-	//
+	panicWithError := func(err error) {
+		panic(
+			fmt.Sprintf(
+				"invalid operation accessing task id in the presense of input error: %v",
+				err))
+	}
+	if o.inputErr != nil {
+		panicWithError(o.inputErr)
+
+	}
+	if o.dbErr != nil {
+		panicWithError(o.dbErr)
+	}
 	return *o.taskId
 }
 
@@ -35,4 +50,8 @@ func (o CreateTaskOut) IsInputError() (bool, error) {
 
 func (o CreateTaskOut) IsDatabaseError() (bool, error) {
 	return o.dbErr != nil, o.dbErr
+}
+
+func (o CreateTaskOut) IsSuccess() bool {
+	return o.taskId != nil
 }

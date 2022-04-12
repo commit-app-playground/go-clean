@@ -71,3 +71,43 @@ func TestMarkIncomplete(t *testing.T) {
 
 	assert.Equal(t, task.Done(), false)
 }
+
+func TestString_NewTask(t *testing.T) {
+	name, err := NewTaskName("foo")
+	assert.NilError(t, err)
+	task := NewTask(name)
+
+	assert.Equal(t, task.String(), "[_] foo <new>")
+}
+
+func TestString_NewTask_Done(t *testing.T) {
+	name, err := NewTaskName("foo")
+	assert.NilError(t, err)
+	task := NewTask(name)
+	task.MarkComplete()
+
+	assert.Equal(t, task.String(), "[✓] foo <new>")
+}
+
+func TestString_ExistingTask(t *testing.T) {
+	id, err := NewTaskId("task-id")
+	assert.NilError(t, err)
+	name, err := NewTaskName("task name")
+	assert.NilError(t, err)
+	task, err := NewTaskFromExisting(id, name, false)
+	assert.NilError(t, err)
+
+	assert.Equal(t, task.String(), "[_] task name (task-id)")
+}
+
+func TestString_ExistingTask_Done(t *testing.T) {
+	id, err := NewTaskId("task-id")
+	assert.NilError(t, err)
+	name, err := NewTaskName("task name")
+	assert.NilError(t, err)
+	task, err := NewTaskFromExisting(id, name, false)
+	assert.NilError(t, err)
+	task.MarkComplete()
+
+	assert.Equal(t, task.String(), "[✓] task name (task-id)")
+}

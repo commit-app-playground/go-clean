@@ -47,10 +47,13 @@ func (t *Task) MarkIncomplete() {
 	t.done = false
 }
 
+//
+// Used for debugging mainly
+//
 func (t *Task) String() string {
 	done := "_"
 	if t.done {
-		done = "✔"
+		done = "✓"
 	}
 
 	id := "<new>"
