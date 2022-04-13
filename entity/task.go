@@ -50,6 +50,13 @@ func (t *Task) MarkIncomplete() {
 //
 // Used for debugging mainly
 //
+// Example output:
+//
+//  - new incomplete task     [_] a task <new>
+//  - saved task              [_] a task (an-id)
+//  - task marked complete    [✓] a task (an-id)
+//  - task marked incomplete  [_] a task (an-id)
+//
 func (t *Task) String() string {
 	done := "_"
 	if t.done {
