@@ -17,7 +17,7 @@ func NewTaskStore(db *sql.DB) *TaskStore {
 	return &TaskStore{db}
 }
 
-func (s TaskStore) SaveNewTask(t *entity.Task) (*entity.TaskId, error) {
+func (s *TaskStore) SaveNewTask(t *entity.Task) (*entity.TaskId, error) {
 
 	row := s.db.QueryRow(
 		"INSERT INTO tasks (name, done) VALUES($1, $2) RETURNING id",
@@ -39,7 +39,7 @@ func (s TaskStore) SaveNewTask(t *entity.Task) (*entity.TaskId, error) {
 	return taskId, nil
 }
 
-func (s TaskStore) SaveTask(t *entity.Task) error {
+func (s *TaskStore) SaveTask(t *entity.Task) error {
 	//
 	// TODO: implement saving for realz
 	//

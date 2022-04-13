@@ -12,11 +12,11 @@ type CreateTaskPresenter struct {
 	w http.ResponseWriter
 }
 
-func NewCreateTaskPresenter(w http.ResponseWriter) CreateTaskPresenter {
-	return CreateTaskPresenter{w: w}
+func NewCreateTaskPresenter(w http.ResponseWriter) *CreateTaskPresenter {
+	return &CreateTaskPresenter{w: w}
 }
 
-func (p CreateTaskPresenter) Present(o create.CreateTaskOut) {
+func (p *CreateTaskPresenter) Present(o create.CreateTaskOut) {
 	w := p.w
 
 	statusCode, err := func() (int, error) {

@@ -16,6 +16,6 @@ func NewTaskId(s string) (*TaskId, error) {
 	return &TaskId{s}, nil
 }
 
-func (ti TaskId) String() string {
+func (ti *TaskId) String() string {
 	return ti.val
 }

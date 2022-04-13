@@ -18,6 +18,6 @@ func NewTaskName(s string) (*TaskName, error) {
 	return &TaskName{s}, nil
 }
 
-func (tn TaskName) String() string {
+func (tn *TaskName) String() string {
 	return tn.val
 }
