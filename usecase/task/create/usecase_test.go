@@ -8,15 +8,6 @@ import (
 	"gotest.tools/assert"
 )
 
-type MockNewTaskSaver struct {
-	id  *entity.TaskId
-	err error
-}
-
-type MockPresenter struct {
-	out CreateTaskOut
-}
-
 func makeUseCase() (*CreateTaskUseCase, *MockNewTaskSaver, *MockPresenter) {
 	s := &MockNewTaskSaver{}
 	p := &MockPresenter{}
@@ -66,29 +57,4 @@ func TestHandle_Success(t *testing.T) {
 	out := p.Received()
 	assert.Assert(t, out.IsSuccess())
 	assert.Equal(t, out.TaskId(), "task-id")
-}
-
-func (s *MockNewTaskSaver) SetupFailure(err error) {
-	s.id = nil
-	s.err = err
-}
-
-func (s *MockNewTaskSaver) SetupSuccess(id *entity.TaskId) {
-	s.err = nil
-	s.id = id
-}
-
-func (s *MockNewTaskSaver) SaveNewTask(t *entity.Task) (*entity.TaskId, error) {
-	if s.id != nil {
-		return s.id, nil
-	}
-	return nil, s.err
-}
-
-func (p *MockPresenter) Present(out CreateTaskOut) {
-	p.out = out
-}
-
-func (p *MockPresenter) Received() CreateTaskOut {
-	return p.out
 }

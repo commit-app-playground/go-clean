@@ -2,7 +2,6 @@ package parser
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -19,7 +18,9 @@ func ParseRequestAs[TPayload any](r *http.Request) (payload TPayload, err error)
 
 	hct := r.Header[contentType]
 	if _, ok := slices.BinarySearch(hct, applicationJson); !ok {
-		err = fmt.Errorf("invalid request %s (expected %q)", contentType, applicationJson)
+		err = fmt.Errorf(
+			"invalid request %s (expected %q, received %q)",
+			contentType, applicationJson, hct)
 		return
 	}
 
@@ -28,7 +29,7 @@ func ParseRequestAs[TPayload any](r *http.Request) (payload TPayload, err error)
 
 	err = decoder.Decode(&payload)
 	if err == io.EOF {
-		err = errors.New("Missing request body")
+		err = fmt.Errorf("missing request body")
 		return
 	}
 
