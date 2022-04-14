@@ -21,7 +21,7 @@ func NewCreateTaskUseCase(
 
 func (u *CreateTaskUseCase) Handle(in CreateTaskIn) {
 	out := func() CreateTaskOut {
-		tn, err := entity.NewTaskName(in.taskName)
+		tn, err := entity.NewTaskName(in.TaskName())
 		if err != nil {
 			return CreateTaskOut{}.InputError(err)
 		}

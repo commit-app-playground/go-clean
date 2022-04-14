@@ -18,5 +18,5 @@ func TestNewCreateTaskIn_Success(t *testing.T) {
 
 	assert.NilError(t, err)
 	assert.Assert(t, in != nil)
-	assert.Equal(t, in.taskName, "new task")
+	assert.Equal(t, in.TaskName(), "new task")
 }

@@ -2,13 +2,21 @@ package create
 
 import "fmt"
 
-type CreateTaskIn struct {
+type CreateTaskIn interface {
+	TaskName() string
+}
+
+type createTaskIn struct {
 	taskName string
 }
 
-func NewCreateTaskIn(taskName string) (*CreateTaskIn, error) {
+func NewCreateTaskIn(taskName string) (CreateTaskIn, error) {
 	if taskName == "" {
 		return nil, fmt.Errorf("task name is required but got empty")
 	}
-	return &CreateTaskIn{taskName}, nil
+	return &createTaskIn{taskName}, nil
+}
+
+func (in *createTaskIn) TaskName() string {
+	return in.taskName
 }

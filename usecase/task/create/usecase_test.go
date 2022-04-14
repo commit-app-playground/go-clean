@@ -18,7 +18,8 @@ func makeUseCase() (*CreateTaskUseCase, *MockNewTaskSaver, *MockPresenter) {
 
 func TestHandle_InputError(t *testing.T) {
 	uc, _, p := makeUseCase()
-	in := CreateTaskIn{}
+	in, err := NewCreateTaskIn(" ")
+	assert.NilError(t, err)
 
 	uc.Handle(in)
 
@@ -35,7 +36,7 @@ func TestHandle_DbError(t *testing.T) {
 	in, err := NewCreateTaskIn("foo")
 	assert.NilError(t, err)
 
-	uc.Handle(*in)
+	uc.Handle(in)
 
 	out := p.Received()
 	isErr, err := out.IsDatabaseError()
@@ -52,7 +53,7 @@ func TestHandle_Success(t *testing.T) {
 	in, err := NewCreateTaskIn("new task")
 	assert.NilError(t, err)
 
-	uc.Handle(*in)
+	uc.Handle(in)
 
 	out := p.Received()
 	assert.Assert(t, out.IsSuccess())
