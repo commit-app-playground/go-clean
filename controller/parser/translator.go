@@ -2,12 +2,12 @@ package parser
 
 import "net/http"
 
-type InputFactory[TPayload any, TInput any] func(p TPayload) (*TInput, error)
+type Translator[TPayload any, TInput any] func(p TPayload) (*TInput, error)
 
 func ParseAndTranslate[TPayload any, TInput any](
 
 	r *http.Request,
-	f InputFactory[TPayload, TInput],
+	f Translator[TPayload, TInput],
 
 ) (*TInput, error) {
 
