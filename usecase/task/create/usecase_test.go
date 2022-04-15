@@ -24,8 +24,8 @@ func TestHandle_InputError(t *testing.T) {
 	uc.Handle(in)
 
 	out := p.Received()
-	isErr, err := out.IsInputError()
-	assert.Assert(t, isErr)
+	_, err = out.TaskId()
+	assert.Check(t, out.IsInputError(err))
 	assert.Assert(t, len(err.Error()) > 0)
 }
 
@@ -39,8 +39,8 @@ func TestHandle_DbError(t *testing.T) {
 	uc.Handle(in)
 
 	out := p.Received()
-	isErr, err := out.IsDatabaseError()
-	assert.Assert(t, isErr)
+	_, err = out.TaskId()
+	assert.Check(t, out.IsDbGatewayError(err))
 	assert.Assert(t, len(err.Error()) > 0)
 }
 
@@ -56,6 +56,6 @@ func TestHandle_Success(t *testing.T) {
 	uc.Handle(in)
 
 	out := p.Received()
-	assert.Assert(t, out.IsSuccess())
-	assert.Equal(t, out.TaskId(), "task-id")
+	tid, err := out.TaskId()
+	assert.Check(t, *tid == id.String())
 }

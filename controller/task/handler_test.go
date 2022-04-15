@@ -70,6 +70,10 @@ func TestCreate_Success(t *testing.T) {
 	assert.Equal(t, rr.Body.String(), "")
 }
 
+// TODO: db failure test
+
+// TODO: invalid route / not found test
+
 func bootstrap(saver *uc.MockNewTaskSaver) CreateTaskUseCaseFactory {
 	return func(w http.ResponseWriter, r *http.Request) uc.CreateTaskUseCase {
 		return uc.NewCreateTaskUseCase(

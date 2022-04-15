@@ -19,16 +19,20 @@ func NewCreateTaskPresenter(w http.ResponseWriter) *CreateTaskPresenter {
 func (p *CreateTaskPresenter) Present(o create.CreateTaskOut) {
 	w := p.w
 
-	statusCode, err := func() (int, error) {
-
-		if yes, err := o.IsInputError(); yes {
-			return http.StatusBadRequest, err
-		} else if yes, err := o.IsDatabaseError(); yes {
-			// OR could return http.StatusBadGateway
-			return http.StatusInternalServerError, err
-		} else {
-			return http.StatusCreated, nil
+	statusCode, err, taskId := func() (int, error, *string) {
+		t, err := o.TaskId()
+		if err == nil {
+			return http.StatusCreated, nil, t
 		}
+		if o.IsInputError(err) {
+			return http.StatusBadRequest, err, nil
+		}
+		if o.IsDbGatewayError(err) {
+			return http.StatusBadGateway, err, nil
+			// or http.StatusInternalServerError
+		}
+		return http.StatusInternalServerError, err, nil
+		// or panic("I don't know how to present this use case output")
 	}()
 
 	if err != nil {
@@ -38,7 +42,7 @@ func (p *CreateTaskPresenter) Present(o create.CreateTaskOut) {
 
 	} else {
 
-		id := url.PathEscape(o.TaskId())
+		id := url.PathEscape(*taskId)
 
 		// TODO: the route /tasks can be a constant
 		// declared somewhere in the common web api related code

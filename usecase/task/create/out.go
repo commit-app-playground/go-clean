@@ -1,57 +1,51 @@
 package create
 
-import (
-	"fmt"
-	"toporet/hop/goclean/entity"
-)
+import "toporet/hop/goclean/entity"
 
-type CreateTaskOut struct {
-	taskId   *string
-	inputErr error
-	dbErr    error
+type out struct {
+	taskId      *string
+	inputErr    error
+	databaseErr error
 }
 
-func (o CreateTaskOut) InputError(err error) CreateTaskOut {
-	return CreateTaskOut{inputErr: err}
+type CreateTaskOut interface {
+	TaskId() (*string, error)
+	IsDbGatewayError(e error) bool
+	IsInputError(e error) bool
 }
 
-func (o CreateTaskOut) DatabaseError(err error) CreateTaskOut {
-	return CreateTaskOut{dbErr: err}
+func NewCreateTaskOutSuccess(id *entity.TaskId) CreateTaskOut {
+	i := id.String()
+	return &out{taskId: &i}
 }
 
-func (o CreateTaskOut) Success(id *entity.TaskId) CreateTaskOut {
-	idStr := id.String()
-	return CreateTaskOut{taskId: &idStr}
+func NewCreateTaskOutDbGatewayError(err error) CreateTaskOut {
+	return &out{databaseErr: err}
 }
 
-//
-// Will panic if accessed when either of inputErr or dbErr are not nil
-//
-func (o CreateTaskOut) TaskId() string {
-	panicWithError := func(err error) {
-		panic(
-			fmt.Sprintf(
-				"invalid operation accessing task id in the presense of input error: %v",
-				err))
+func NewCreateTaskOutInputError(err error) CreateTaskOut {
+	return &out{inputErr: err}
+}
+
+func (o *out) TaskId() (*string, error) {
+	if o.taskId != nil {
+		return o.taskId, nil
 	}
 	if o.inputErr != nil {
-		panicWithError(o.inputErr)
-
+		return nil, o.inputErr
 	}
-	if o.dbErr != nil {
-		panicWithError(o.dbErr)
+	if o.databaseErr != nil {
+		return nil, o.databaseErr
 	}
-	return *o.taskId
+	panic("one of the properties must be initialized " +
+		"(taskId, inputErr or dbErr) using corresponding " +
+		"constuctor function (NewCreateTaskOut<...>)")
 }
 
-func (o CreateTaskOut) IsInputError() (bool, error) {
-	return o.inputErr != nil, o.inputErr
+func (o *out) IsDbGatewayError(e error) bool {
+	return o.databaseErr == e
 }
 
-func (o CreateTaskOut) IsDatabaseError() (bool, error) {
-	return o.dbErr != nil, o.dbErr
-}
-
-func (o CreateTaskOut) IsSuccess() bool {
-	return o.taskId != nil
+func (o *out) IsInputError(e error) bool {
+	return o.inputErr == e
 }
