@@ -1,0 +1,13 @@
+### Valid request
+
+GET http://localhost:8080/tasks
+
+
+
+### Valid request
+
+GET http://localhost:8080/tasks/123
+
+### Valid request
+
+GET http://localhost:8080/tasks/foo/bar

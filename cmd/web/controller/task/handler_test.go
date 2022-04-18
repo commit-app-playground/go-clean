@@ -8,7 +8,8 @@ import (
 
 	presenter "toporet/hop/goclean/cmd/web/presenter/task"
 	"toporet/hop/goclean/pkg/entity"
-	uc "toporet/hop/goclean/pkg/usecase/task/create"
+	"toporet/hop/goclean/pkg/usecase/task/create"
+	"toporet/hop/goclean/pkg/usecase/task/getall"
 
 	"gotest.tools/assert"
 )
@@ -18,7 +19,7 @@ const (
 )
 
 func TestCreate_InvalidRequest(t *testing.T) {
-	mockDb := &uc.MockNewTaskSaver{}
+	mockDb := &create.MockNewTaskSaver{}
 	handler := Handle(bootstrap(mockDb))
 
 	cases := []struct {
@@ -46,7 +47,7 @@ func TestCreate_InvalidRequest(t *testing.T) {
 }
 
 func TestCreate_Success(t *testing.T) {
-	mockDb := &uc.MockNewTaskSaver{}
+	mockDb := &create.MockNewTaskSaver{}
 	id, err := entity.NewTaskId("42")
 	if err != nil {
 		t.Fatal(err.Error())
@@ -74,11 +75,20 @@ func TestCreate_Success(t *testing.T) {
 
 // TODO: invalid route / not found test
 
-func bootstrap(saver *uc.MockNewTaskSaver) CreateTaskUseCaseFactory {
-	return func(w http.ResponseWriter, r *http.Request) uc.CreateTaskUseCase {
-		return uc.NewCreateTaskUseCase(
-			saver,
-			presenter.NewCreateTaskPresenter(w),
-		)
-	}
+func bootstrap(
+	saver *create.MockNewTaskSaver,
+	// fetcher *create.MockAllTasksFetcher,
+) (
+	CreateTaskUseCaseFactory,
+	GetAllTasksUseCaseFactory,
+) {
+	return func(w http.ResponseWriter, r *http.Request) create.CreateTaskUseCase {
+			return create.NewCreateTaskUseCase(
+				saver, presenter.NewCreateTaskPresenter(w),
+			)
+		}, func(w http.ResponseWriter, r *http.Request) getall.GetAllTasksUseCase {
+			return getall.NewGetAllTasksUseCase(
+				// TODO: replace nil with a mock
+				nil, presenter.NewGetAllTasksPresenter(w))
+		}
 }
