@@ -6,6 +6,6 @@ type GetAllTasksIn interface {
 type getAllTasksIn struct {
 }
 
-func NewGetAllTasksIn() (GetAllTasksIn, error) {
-	return &getAllTasksIn{}, nil
+func NewGetAllTasksIn() GetAllTasksIn {
+	return &getAllTasksIn{}
 }

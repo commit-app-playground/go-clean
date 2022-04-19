@@ -1,13 +1,26 @@
-### Valid request
+### Valid request (without trailing slash)
 
 GET http://localhost:8080/tasks
 
+### Valid request (with trailing slash)
+
+GET http://localhost:8080/tasks/
 
 
-### Valid request
+### Valid request (query without trailing slash)
+
+GET http://localhost:8080/tasks?foo=bar
+
+
+### Valid request (query with trailing slash)
+
+GET http://localhost:8080/tasks/?foo=bar
+
+
+### not found
 
 GET http://localhost:8080/tasks/123
 
-### Valid request
+### not found
 
 GET http://localhost:8080/tasks/foo/bar
